@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useCart } from '../context/CartContext'
 
 const UPI_ID = 'narasalapavankumarkumar@oksbi'
+const MERCHANT = 'NIYU Perfumes'
 
 const paymentMethods = [
   {
@@ -10,48 +11,40 @@ const paymentMethods = [
     name: 'PhonePe',
     color: '#5f259f',
     bgLight: '#f3ecff',
-    // PhonePe UPI deep link — if app not installed, falls back to generic UPI
-    getUrl: (amt) => `phonepe://pay?pa=${UPI_ID}&pn=${encodeURIComponent('NIYU Perfumes')}&am=${amt}&cu=INR`,
-    fallbackUrl: (amt) => `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent('NIYU Perfumes')}&am=${amt}&cu=INR`,
   },
   {
     id: 'gpay',
     name: 'Google Pay',
     color: '#4285F4',
     bgLight: '#e8f0fe',
-    // Google Pay UPI deep link
-    getUrl: (amt) => `gpay://upi/pay?pa=${UPI_ID}&pn=${encodeURIComponent('NIYU Perfumes')}&am=${amt}&cu=INR`,
-    fallbackUrl: (amt) => `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent('NIYU Perfumes')}&am=${amt}&cu=INR`,
   },
   {
     id: 'paytm',
     name: 'Paytm',
     color: '#00BAF2',
     bgLight: '#e6f8ff',
-    // Paytm UPI deep link
-    getUrl: (amt) => `paytmmp://pay?pa=${UPI_ID}&pn=${encodeURIComponent('NIYU Perfumes')}&am=${amt}&cu=INR`,
-    fallbackUrl: (amt) => `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent('NIYU Perfumes')}&am=${amt}&cu=INR`,
   },
 ]
 
+// Build the standard UPI intent URL — supported by all UPI apps
+function buildUpiUrl(amt) {
+  return `upi://pay?pa=${UPI_ID}&pn=${encodeURIComponent(MERCHANT)}&am=${amt}&cu=INR`
+}
+
 export default function PaymentView() {
   const { subtotal, confirmOrder, setStep } = useCart()
-  const [selectedMethod, setSelectedMethod] = useState(null)
   const [paying, setPaying] = useState(false)
   const [paymentStarted, setPaymentStarted] = useState(false)
+  const [selectedMethod, setSelectedMethod] = useState(null)
 
   const handlePayNow = (method) => {
-    setSelectedMethod(method.id)
+    setSelectedMethod(method)
     setPaymentStarted(true)
 
-    // Try app-specific deep link first
-    const appUrl = method.getUrl(subtotal)
-    window.location.href = appUrl
-
-    // After a short delay, try generic UPI as fallback (if app wasn't installed)
-    setTimeout(() => {
-      window.location.href = method.fallbackUrl(subtotal)
-    }, 1500)
+    // Use window.open so we don't navigate away from the page
+    // If blocked by popup blocker, user can tap "Open Again"
+    const url = buildUpiUrl(subtotal)
+    window.open(url, '_self')
   }
 
   const handleConfirm = async () => {
@@ -86,7 +79,7 @@ export default function PaymentView() {
                 {paymentMethods.map((method) => (
                   <button
                     key={method.id}
-                    onClick={() => handlePayNow(method)}
+                    onClick={() => handlePayNow(method.id)}
                     className="w-full flex items-center gap-4 p-4 rounded-xl border border-ink/8 bg-cream/30 hover:border-gold/40 hover:bg-cream/50 transition-all duration-400 min-h-[44px] active:scale-[0.98]"
                   >
                     <div
@@ -132,7 +125,6 @@ export default function PaymentView() {
               transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
               className="flex flex-col items-center text-center"
             >
-              {/* Animated dots */}
               <div className="w-16 h-16 rounded-full flex items-center justify-center mb-6" style={{ backgroundColor: selected?.bgLight }}>
                 <div className="w-8 h-8 rounded-full flex items-center justify-center text-white text-sm font-bold font-body" style={{ backgroundColor: selected?.color }}>
                   {selected?.name.charAt(0)}
@@ -140,24 +132,38 @@ export default function PaymentView() {
               </div>
 
               <p className="text-lg font-heading font-semibold text-ink-soft mb-2">
-                Opening {selected?.name}...
+                Complete Payment in {selected?.name}
               </p>
               <p className="text-sm text-ink-subtle font-body mb-2">
-                Complete the payment of <span className="font-semibold text-ink-soft">&#8377;{subtotal}</span>
+                Pay <span className="font-semibold text-ink-soft">&#8377;{subtotal}</span> to {MERCHANT}
               </p>
               <p className="text-[11px] text-ink-subtle/70 font-body mb-6">
                 UPI ID: {UPI_ID}
               </p>
 
-              {/* Retry button if app didn't open */}
+              {/* Open Again button */}
               <button
-                onClick={() => {
-                  window.location.href = selected?.fallbackUrl(subtotal)
-                }}
-                className="py-3 px-6 rounded-full border border-gold/30 text-gold text-[11px] tracking-[0.08em] uppercase font-body font-medium hover:bg-gold/5 transition-all duration-400 mb-4 min-h-[44px]"
+                onClick={() => window.open(buildUpiUrl(subtotal), '_self')}
+                className="py-3 px-6 rounded-full border border-gold/30 text-gold text-[11px] tracking-[0.08em] uppercase font-body font-medium hover:bg-gold/5 transition-all duration-400 mb-3 min-h-[44px]"
               >
                 Open {selected?.name} Again
               </button>
+
+              {/* Switch app buttons */}
+              <div className="flex gap-2 mb-6">
+                {paymentMethods.filter(m => m.id !== selectedMethod).map((m) => (
+                  <button
+                    key={m.id}
+                    onClick={() => {
+                      setSelectedMethod(m.id)
+                      window.open(buildUpiUrl(subtotal), '_self')
+                    }}
+                    className="py-2 px-4 rounded-full bg-cream/40 border border-ink/5 text-[11px] font-body font-medium text-ink-subtle hover:border-gold/30 transition-all duration-300 min-h-[44px]"
+                  >
+                    Switch to {m.name}
+                  </button>
+                ))}
+              </div>
 
               <p className="text-[11px] text-ink-subtle font-body">
                 Once payment is done, come back and tap "I Have Paid" below

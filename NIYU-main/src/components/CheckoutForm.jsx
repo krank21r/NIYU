@@ -70,6 +70,7 @@ export default function CheckoutForm() {
           <label className="block text-[11px] tracking-[0.1em] uppercase text-ink-subtle font-body font-medium mb-2">Pincode</label>
           <input
             type="text"
+            inputMode="numeric"
             value={delivery.pincode}
             onChange={handleChange('pincode')}
             placeholder="6-digit pincode"

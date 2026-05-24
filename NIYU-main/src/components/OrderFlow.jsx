@@ -38,9 +38,10 @@ export default function OrderFlow() {
         exit={{ opacity: 0 }}
         transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
         className="fixed inset-0 z-[100] bg-ivory flex flex-col"
+        style={{ overscrollBehavior: 'contain' }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-4 border-b border-ink/5 bg-ivory/90 backdrop-blur-sm flex-shrink-0">
+        <div className="flex items-center justify-between px-5 pt-[max(1rem,env(safe-area-inset-top))] pb-4 border-b border-ink/5 bg-ivory/90 backdrop-blur-sm flex-shrink-0">
           <button
             onClick={step === 'cart' ? closeFlow : () => {
               const order = ['cart', 'checkout', 'payment', 'confirmation']

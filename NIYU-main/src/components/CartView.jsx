@@ -88,7 +88,7 @@ export default function CartView() {
       </div>
 
       {/* Footer */}
-      <div className="border-t border-ink/5 p-6 bg-ivory/80 backdrop-blur-sm">
+      <div className="border-t border-ink/5 p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] bg-ivory/80 backdrop-blur-sm">
         <div className="flex items-center justify-between mb-5">
           <span className="text-sm text-ink-subtle font-body">Subtotal</span>
           <span className="text-xl font-heading font-bold text-ink-soft">&#8377;{subtotal}</span>

@@ -40,7 +40,7 @@ export default function ProductModal() {
         animate={{ opacity: 1, y: 0, scale: 1 }}
         exit={{ opacity: 0, y: 20, scale: 0.97 }}
         transition={{ duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
-        className="relative w-full max-w-md bg-ivory rounded-2xl overflow-hidden shadow-[0_24px_80px_rgba(26,22,18,0.12)]"
+        className="relative w-full max-w-md max-h-[90vh] overflow-y-auto bg-ivory rounded-2xl shadow-[0_24px_80px_rgba(26,22,18,0.12)]"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close button */}

@@ -36,7 +36,7 @@ export default function CheckoutForm() {
             value={delivery.name}
             onChange={handleChange('name')}
             placeholder="Enter your full name"
-            className={`w-full px-4 py-3 rounded-xl bg-cream/40 border ${errors.name ? 'border-red-400' : 'border-ink/8'} text-sm font-body text-ink-soft placeholder:text-ink-subtle/50 focus:outline-none focus:border-gold/50 transition-colors duration-300`}
+            className={`w-full px-4 py-3 rounded-xl bg-cream/40 border ${errors.name ? 'border-red-400' : 'border-ink/8'} text-[16px] font-body text-ink-soft placeholder:text-ink-subtle/50 focus:outline-none focus:border-gold/50 transition-colors duration-300`}
           />
           {errors.name && <p className="text-[11px] text-red-500 font-body mt-1">{errors.name}</p>}
         </div>
@@ -49,7 +49,7 @@ export default function CheckoutForm() {
             onChange={handleChange('phone')}
             placeholder="10-digit mobile number"
             maxLength={10}
-            className={`w-full px-4 py-3 rounded-xl bg-cream/40 border ${errors.phone ? 'border-red-400' : 'border-ink/8'} text-sm font-body text-ink-soft placeholder:text-ink-subtle/50 focus:outline-none focus:border-gold/50 transition-colors duration-300`}
+            className={`w-full px-4 py-3 rounded-xl bg-cream/40 border ${errors.phone ? 'border-red-400' : 'border-ink/8'} text-[16px] font-body text-ink-soft placeholder:text-ink-subtle/50 focus:outline-none focus:border-gold/50 transition-colors duration-300`}
           />
           {errors.phone && <p className="text-[11px] text-red-500 font-body mt-1">{errors.phone}</p>}
         </div>
@@ -61,7 +61,7 @@ export default function CheckoutForm() {
             onChange={handleChange('address')}
             placeholder="House no., Street, City, State"
             rows={3}
-            className={`w-full px-4 py-3 rounded-xl bg-cream/40 border ${errors.address ? 'border-red-400' : 'border-ink/8'} text-sm font-body text-ink-soft placeholder:text-ink-subtle/50 focus:outline-none focus:border-gold/50 transition-colors duration-300 resize-none`}
+            className={`w-full px-4 py-3 rounded-xl bg-cream/40 border ${errors.address ? 'border-red-400' : 'border-ink/8'} text-[16px] font-body text-ink-soft placeholder:text-ink-subtle/50 focus:outline-none focus:border-gold/50 transition-colors duration-300 resize-none`}
           />
           {errors.address && <p className="text-[11px] text-red-500 font-body mt-1">{errors.address}</p>}
         </div>
@@ -74,14 +74,14 @@ export default function CheckoutForm() {
             onChange={handleChange('pincode')}
             placeholder="6-digit pincode"
             maxLength={6}
-            className={`w-full px-4 py-3 rounded-xl bg-cream/40 border ${errors.pincode ? 'border-red-400' : 'border-ink/8'} text-sm font-body text-ink-soft placeholder:text-ink-subtle/50 focus:outline-none focus:border-gold/50 transition-colors duration-300`}
+            className={`w-full px-4 py-3 rounded-xl bg-cream/40 border ${errors.pincode ? 'border-red-400' : 'border-ink/8'} text-[16px] font-body text-ink-soft placeholder:text-ink-subtle/50 focus:outline-none focus:border-gold/50 transition-colors duration-300`}
           />
           {errors.pincode && <p className="text-[11px] text-red-500 font-body mt-1">{errors.pincode}</p>}
         </div>
       </div>
 
       {/* Footer */}
-      <div className="border-t border-ink/5 p-6 bg-ivory/80 backdrop-blur-sm">
+      <div className="border-t border-ink/5 p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] bg-ivory/80 backdrop-blur-sm">
         <div className="flex items-center justify-between mb-5">
           <span className="text-sm text-ink-subtle font-body">Order Total</span>
           <span className="text-xl font-heading font-bold text-ink-soft">&#8377;{subtotal}</span>

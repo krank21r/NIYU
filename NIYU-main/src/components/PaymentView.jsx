@@ -28,7 +28,7 @@ export default function PaymentView() {
           className="p-3 bg-white rounded-2xl shadow-[0_4px_24px_rgba(26,22,18,0.06)] mb-4"
         >
           <img
-            src="/QR Code.jpg"
+            src="/QR-Code.jpg"
             alt="UPI QR Code — Scan to pay"
             className="w-[220px] h-[220px] object-contain"
           />
@@ -47,7 +47,7 @@ export default function PaymentView() {
       </div>
 
       {/* Footer */}
-      <div className="border-t border-ink/5 p-6 bg-ivory/80 backdrop-blur-sm">
+      <div className="border-t border-ink/5 p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] bg-ivory/80 backdrop-blur-sm">
         <div className="flex gap-3">
           <button
             onClick={() => setStep('checkout')}

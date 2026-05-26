@@ -91,7 +91,7 @@ export default function PaymentView() {
                   <a
                     key={method.id}
                     href={getPayUrl(method.id, subtotal)}
-                    onClick={() => setSelectedMethod(method.id)}
+                    onClick={() => handlePayNow(method.id)}
                     className="w-full flex items-center gap-4 p-4 border border-ink/8 bg-cream/30 hover:border-ink/20 hover:bg-cream/50 transition-all duration-400 min-h-[44px] active:scale-[0.98]"
                   >
                     <div

@@ -37,7 +37,7 @@ export default function OrderFlow() {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
-        className="fixed inset-0 z-[100] bg-ivory flex flex-col"
+        className="fixed inset-0 z-[150] bg-ivory flex flex-col"
         style={{ overscrollBehavior: 'contain' }}
       >
         {/* Header */}

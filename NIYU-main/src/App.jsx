@@ -6,6 +6,7 @@ import ScrollProgress from './components/ScrollProgress'
 import ScrollToTop from './components/ScrollToTop'
 import OrderFlow from './components/OrderFlow'
 import ProductDetail from './components/ProductDetail'
+import Particles from './components/Particles'
 import { CartProvider } from './context/CartContext'
 import useLenis from './hooks/useLenis'
 
@@ -44,6 +45,7 @@ export default function App() {
           Skip to main content
         </a>
         <Preloader />
+        <Particles />
         <ScrollProgress />
         <ScrollToTop />
         <AnnouncementBar />

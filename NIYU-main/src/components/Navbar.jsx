@@ -16,15 +16,22 @@ export default function Navbar() {
   const [active, setActive] = useState('#hero')
 
   useEffect(() => {
+    let ticking = false
     const handleScroll = () => {
-      setScrolled(window.scrollY > 60)
-      const sections = ['hero', 'trending', 'specials', 'attars', 'car-perfumes', 'about', 'collection', 'contact']
-      for (let i = sections.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sections[i])
-        if (el && el.getBoundingClientRect().top <= 200) {
-          setActive('#' + sections[i])
-          break
-        }
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          setScrolled(window.scrollY > 60)
+          const sections = ['hero', 'trending', 'specials', 'attars', 'car-perfumes', 'about', 'collection', 'contact']
+          for (let i = sections.length - 1; i >= 0; i--) {
+            const el = document.getElementById(sections[i])
+            if (el && el.getBoundingClientRect().top <= 200) {
+              setActive('#' + sections[i])
+              break
+            }
+          }
+          ticking = false
+        })
+        ticking = true
       }
     }
     window.addEventListener('scroll', handleScroll, { passive: true })
@@ -58,27 +65,25 @@ export default function Navbar() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 1, delay: 0.2, ease: [0.32, 0.72, 0, 1] }}
-        className={`fixed top-9 left-0 right-0 z-50 hidden lg:block transition-all duration-700 ${
+        className={`fixed top-9 left-0 right-0 z-50 hidden lg:block transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] ${
           scrolled
-            ? 'bg-cream/95 backdrop-blur-xl border-b border-gold/10 shadow-[0_1px_20px_rgba(0,0,0,0.03)]'
-            : 'bg-cream/80 backdrop-blur-md'
+            ? 'bg-cream/90 backdrop-blur-2xl border-b border-gold/10 shadow-[0_1px_30px_rgba(0,0,0,0.06)]'
+            : 'bg-cream/60 backdrop-blur-lg'
         }`}
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between h-16 px-8">
           {/* Logo — left */}
           <motion.a
             href="#"
-            className="flex items-baseline gap-1"
+            className="flex items-baseline gap-1 group"
             whileHover={{ scale: 1.02 }}
             onClick={(e) => handleNavClick(e, '#hero')}
             aria-label="NIYU Perfumes — back to top"
           >
-            <span className={`text-xl font-heading tracking-[0.3em] leading-none transition-colors duration-500 ${
-              scrolled ? 'text-charcoal' : 'text-charcoal'
-            }`}>
+            <span className="text-xl font-heading tracking-[0.3em] text-charcoal leading-none transition-all duration-500 group-hover:tracking-[0.35em]">
               NIYU
             </span>
-            <sup className="text-[7px] font-body font-light tracking-normal">®</sup>
+            <sup className="text-[7px] font-body font-light tracking-normal text-ink-muted">®</sup>
           </motion.a>
 
           {/* Nav Links — center */}
@@ -88,16 +93,13 @@ export default function Navbar() {
                 key={link.label}
                 href={link.href}
                 onClick={(e) => handleNavClick(e, link.href)}
-                className={`relative px-4 py-2 text-[11px] tracking-[0.12em] uppercase font-body font-medium transition-colors duration-400 ${
-                  active === link.href
-                    ? 'text-gold-dark'
-                    : scrolled
-                      ? 'text-ink-muted hover:text-ink'
-                      : 'text-ink-muted hover:text-ink'
-                }`}
+                className="group relative px-4 py-2 text-[11px] tracking-[0.12em] uppercase font-body font-medium text-ink-muted hover:text-charcoal transition-colors duration-400"
                 aria-current={active === link.href ? 'page' : undefined}
               >
                 {link.label}
+                {/* Hover underline reveal */}
+                <span className="absolute bottom-0 left-4 right-4 h-[1px] bg-gold scale-x-0 group-hover:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] origin-left" />
+                {/* Active underline */}
                 {active === link.href && (
                   <motion.div
                     layoutId="activeNav"
@@ -119,34 +121,34 @@ export default function Navbar() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 1, delay: 0.2, ease: [0.32, 0.72, 0, 1] }}
-        className={`fixed top-9 left-0 right-0 z-50 lg:hidden transition-all duration-500 ${
+        className={`fixed top-9 left-0 right-0 z-50 lg:hidden transition-all duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] ${
           scrolled || mobileOpen
-            ? 'bg-cream/95 backdrop-blur-xl border-b border-gold/10'
-            : 'bg-cream/80 backdrop-blur-md'
+            ? 'bg-cream/90 backdrop-blur-2xl border-b border-gold/10 shadow-[0_1px_30px_rgba(0,0,0,0.06)]'
+            : 'bg-cream/60 backdrop-blur-lg'
         }`}
       >
         <div className="flex items-center justify-between h-14 px-5">
           {/* Hamburger — left */}
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
-            className="relative w-10 h-10 flex items-center justify-center -ml-1"
+            className="relative w-11 h-11 flex items-center justify-center -ml-1"
             aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
             aria-expanded={mobileOpen}
           >
-            <div className="w-5 flex flex-col gap-[5px]">
+            <div className="w-5 flex flex-col gap-[6px]">
               <motion.span
-                animate={mobileOpen ? { rotate: 45, y: 5.5 } : { rotate: 0, y: 0 }}
-                transition={{ duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
+                animate={mobileOpen ? { rotate: 45, y: 6 } : { rotate: 0, y: 0 }}
+                transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
                 className="block w-full h-[1.5px] bg-charcoal origin-center"
               />
               <motion.span
-                animate={mobileOpen ? { opacity: 0, x: -6 } : { opacity: 1, x: 0 }}
-                transition={{ duration: 0.25 }}
-                className="block w-full h-[1.5px] bg-charcoal"
+                animate={mobileOpen ? { opacity: 0, x: -8, scaleX: 0 } : { opacity: 1, x: 0, scaleX: 1 }}
+                transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
+                className="block w-full h-[1.5px] bg-charcoal origin-left"
               />
               <motion.span
-                animate={mobileOpen ? { rotate: -45, y: -5.5 } : { rotate: 0, y: 0 }}
-                transition={{ duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
+                animate={mobileOpen ? { rotate: -45, y: -6 } : { rotate: 0, y: 0 }}
+                transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
                 className="block w-full h-[1.5px] bg-charcoal origin-center"
               />
             </div>
@@ -155,19 +157,19 @@ export default function Navbar() {
           {/* Logo — center */}
           <motion.a
             href="#"
-            className="absolute left-1/2 -translate-x-1/2 flex items-baseline gap-0.5"
+            className="absolute left-1/2 -translate-x-1/2 flex items-baseline gap-0.5 group"
             whileHover={{ scale: 1.02 }}
             onClick={(e) => handleNavClick(e, '#hero')}
             aria-label="NIYU Perfumes — back to top"
           >
-            <span className="text-lg font-heading tracking-[0.3em] text-charcoal leading-none">
+            <span className="text-lg font-heading tracking-[0.3em] text-charcoal leading-none transition-all duration-500 group-hover:tracking-[0.35em]">
               NIYU
             </span>
-            <sup className="text-[8px] font-body font-light tracking-normal">®</sup>
+            <sup className="text-[8px] font-body font-light tracking-normal text-ink-muted">®</sup>
           </motion.a>
 
           {/* Right spacer */}
-          <div className="w-10" />
+          <div className="w-11" />
         </div>
       </motion.header>
 
@@ -184,12 +186,18 @@ export default function Navbar() {
             {/* Close button — top right */}
             <button
               onClick={() => setMobileOpen(false)}
-              className="absolute top-4 right-5 w-10 h-10 flex items-center justify-center"
+              className="absolute top-4 right-5 w-11 h-11 flex items-center justify-center"
               aria-label="Close menu"
             >
-              <svg className="w-5 h-5 text-charcoal" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <motion.svg
+                initial={{ rotate: -90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                transition={{ duration: 0.4, ease: [0.32, 0.72, 0, 1] }}
+                className="w-5 h-5 text-charcoal"
+                fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}
+              >
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
+              </motion.svg>
             </button>
 
             {/* Nav links */}
@@ -203,7 +211,7 @@ export default function Navbar() {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -15 }}
                   transition={{ delay: 0.08 + i * 0.05, duration: 0.5, ease: [0.32, 0.72, 0, 1] }}
-                  className={`text-[13px] tracking-[0.18em] uppercase font-body font-medium py-3 transition-colors duration-400 ${
+                  className={`relative text-[13px] tracking-[0.18em] uppercase font-body font-medium py-3 transition-colors duration-400 ${
                     active === link.href
                       ? 'text-gold-dark'
                       : 'text-ink-muted hover:text-charcoal'
@@ -211,6 +219,8 @@ export default function Navbar() {
                   aria-current={active === link.href ? 'page' : undefined}
                 >
                   {link.label}
+                  {/* Hover underline */}
+                  <span className="absolute bottom-1 left-0 right-0 h-[1px] bg-gold scale-x-0 hover:scale-x-100 transition-transform duration-500 ease-[cubic-bezier(0.32,0.72,0,1)] origin-center" />
                 </motion.a>
               ))}
             </div>

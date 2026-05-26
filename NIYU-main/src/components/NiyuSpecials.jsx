@@ -50,7 +50,7 @@ function ProductCard({ product, index }) {
             src={product.image}
             alt={`${product.name} perfume`}
             loading="lazy"
-            className="h-40 w-auto object-contain opacity-80 group-hover:opacity-100 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-105"
+            className="h-40 w-auto object-contain opacity-80 group-hover:opacity-100 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-110 group-hover:drop-shadow-[0_12px_32px_rgba(201,169,110,0.25)]"
           />
         </div>
         <div className="p-5 mt-auto">
@@ -87,13 +87,13 @@ function CategoryCard({ item, index, isActive, onClick }) {
       <div className="relative overflow-hidden h-[200px] sm:h-[240px]">
         <img
           src={item.image}
-          alt=""
+          alt={`NIYU ${item.name} collection`}
           loading="lazy"
-          className="absolute inset-0 w-full h-full object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-105"
+          className="absolute inset-0 w-full h-full object-cover transition-transform duration-[0.7s] ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-105"
         />
         <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
         <div className="relative h-full flex flex-col justify-center px-8 sm:px-12 z-10">
-          <h3 className="text-3xl sm:text-4xl font-heading text-white mb-2">
+          <h3 className="text-2xl sm:text-3xl font-heading text-white mb-2">
             {item.name}
           </h3>
           <p className="text-sm sm:text-base font-body font-light text-white/80 max-w-xs leading-relaxed">
@@ -183,7 +183,7 @@ export default function NiyuSpecials() {
             >
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
-                  <h3 className="text-2xl sm:text-3xl font-heading text-ink">All Perfumes</h3>
+                  <h3 className="text-lg sm:text-xl font-heading text-ink-soft">All Perfumes</h3>
                   <div className="w-8 h-[1px] bg-gold" />
                 </div>
                 <div className="hidden sm:flex items-center gap-2">
@@ -210,8 +210,7 @@ export default function NiyuSpecials() {
 
               <div
                 ref={scrollRef}
-                className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4"
-                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-4 scrollbar-none"
               >
                 {products.map((product, i) => (
                   <ProductCard key={product.id} product={product} index={i} />

@@ -27,14 +27,14 @@ function TrendingCard({ product, index }) {
           </span>
 
           {/* Image */}
-          <div className="flex justify-center items-center flex-1 mb-4 min-h-[180px]">
+          <div className="flex justify-center items-center flex-1 mb-4 min-h-[180px] liquid-shimmer">
             <img
               src={product.image}
               alt={`${product.name} perfume bottle`}
               loading="lazy"
               width="160"
               height="220"
-              className="h-44 w-auto object-contain opacity-75 group-hover:opacity-100 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-105 group-hover:drop-shadow-[0_8px_24px_rgba(201,169,110,0.15)] pointer-events-none"
+              className="h-44 w-auto object-contain opacity-75 group-hover:opacity-100 transition-all duration-700 ease-[cubic-bezier(0.32,0.72,0,1)] group-hover:scale-110 group-hover:drop-shadow-[0_12px_32px_rgba(201,169,110,0.25)] pointer-events-none"
             />
           </div>
 
@@ -137,18 +137,14 @@ export default function TrendingProducts() {
       {/* Horizontal scroll row */}
       <div
         ref={scrollRef}
-        className="flex gap-5 px-4 sm:px-6 overflow-x-auto"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none', scrollSnapType: 'x mandatory' }}
+        className="flex gap-5 px-4 sm:px-6 overflow-x-auto scrollbar-none"
+        style={{ scrollSnapType: 'x mandatory' }}
       >
         {trendingProducts.map((product, i) => (
           <TrendingCard key={product.name} product={product} index={i} />
         ))}
         <div className="flex-shrink-0 w-4" aria-hidden="true" />
       </div>
-
-      <style>{`
-        div::-webkit-scrollbar { display: none; }
-      `}</style>
     </section>
   )
 }

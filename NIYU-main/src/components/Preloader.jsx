@@ -33,7 +33,7 @@ export default function Preloader() {
         <motion.div
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, transition: { duration: 1, ease: [0.32, 0.72, 0, 1] } }}
-          className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-ivory"
+          className="fixed inset-0 z-[200] flex flex-col items-center justify-center bg-ivory"
         >
           <motion.div
             initial={{ opacity: 0, y: 30, filter: 'blur(8px)' }}

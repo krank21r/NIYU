@@ -91,6 +91,7 @@ export function CartProvider({ children }) {
     // Insert to Supabase if configured
     if (supabase) {
       try {
+        console.log('[NIYU] Attempting Supabase insert...', { delivery, items, subtotal })
         const { data, error } = await supabase
           .from('orders')
           .insert({
@@ -106,10 +107,17 @@ export function CartProvider({ children }) {
           .select('id')
           .single()
 
-        if (!error && data) setOrderId(data.id)
-      } catch {
-        // Supabase not configured — fail silently
+        if (error) {
+          console.error('[NIYU] Supabase insert error:', error)
+        } else {
+          console.log('[NIYU] Order saved:', data.id)
+          setOrderId(data.id)
+        }
+      } catch (err) {
+        console.error('[NIYU] Supabase exception:', err)
       }
+    } else {
+      console.warn('[NIYU] Supabase not configured — order not saved')
     }
 
     setStep('confirmation')

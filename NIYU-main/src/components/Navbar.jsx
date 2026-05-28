@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useWishlist } from '../context/WishlistContext'
+import WishlistOverlay from './WishlistOverlay'
 
 const navLinks = [
   { label: 'Home', href: '#hero' },
@@ -14,6 +16,8 @@ export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const [active, setActive] = useState('#hero')
+  const [wishlistOpen, setWishlistOpen] = useState(false)
+  const { wishlistCount } = useWishlist()
 
   useEffect(() => {
     let ticking = false
@@ -113,8 +117,21 @@ export default function Navbar() {
             ))}
           </nav>
 
-          {/* Right spacer */}
-          <div className="w-16" />
+          {/* Wishlist icon — right */}
+          <button
+            onClick={() => setWishlistOpen(true)}
+            className="relative w-10 h-10 flex items-center justify-center hover:text-gold transition-colors duration-300 min-w-[44px] min-h-[44px]"
+            aria-label="Open wishlist"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+            </svg>
+            {wishlistCount > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-gold text-white text-[9px] font-body font-bold rounded-full flex items-center justify-center">
+                {wishlistCount}
+              </span>
+            )}
+          </button>
         </div>
       </motion.header>
 
@@ -172,8 +189,21 @@ export default function Navbar() {
             <sup className="text-[11px] font-body font-light tracking-normal text-ink-muted">&reg;</sup>
           </motion.a>
 
-          {/* Right spacer */}
-          <div className="w-11" />
+          {/* Wishlist icon — right */}
+          <button
+            onClick={() => setWishlistOpen(true)}
+            className="relative w-11 h-11 flex items-center justify-center"
+            aria-label="Open wishlist"
+          >
+            <svg className="w-5 h-5 text-charcoal" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+            </svg>
+            {wishlistCount > 0 && (
+              <span className="absolute top-0.5 right-0.5 w-4 h-4 bg-gold text-white text-[9px] font-body font-bold rounded-full flex items-center justify-center">
+                {wishlistCount}
+              </span>
+            )}
+          </button>
         </div>
       </motion.header>
 
@@ -243,6 +273,9 @@ export default function Navbar() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Wishlist Overlay */}
+      <WishlistOverlay open={wishlistOpen} onClose={() => setWishlistOpen(false)} />
     </>
   )
 }

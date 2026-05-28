@@ -1,12 +1,14 @@
 import { motion, useInView } from 'framer-motion'
 import { useRef } from 'react'
 import { useCart } from '../context/CartContext'
+import { useWishlist } from '../context/WishlistContext'
 import { getTrendingProducts } from '../data/products'
 
 const trendingProducts = getTrendingProducts()
 
 function TrendingCard({ product, index }) {
   const { openProductDetail } = useCart()
+  const { toggleWishlist, isWished } = useWishlist()
 
   return (
     <motion.div
@@ -24,6 +26,26 @@ function TrendingCard({ product, index }) {
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openProductDetail(product) } }}
       >
         <div className="flex flex-col h-full relative" style={{ zIndex: 10 }}>
+          {/* Wishlist heart */}
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              toggleWishlist(product.id)
+            }}
+            className="absolute top-3 right-3 w-9 h-9 flex items-center justify-center bg-ivory/80 backdrop-blur-sm border border-ink/5 hover:border-ink/15 transition-all duration-300 z-10 min-w-[44px] min-h-[44px]"
+            aria-label={isWished(product.id) ? 'Remove from wishlist' : 'Add to wishlist'}
+          >
+            <svg
+              className={`w-4 h-4 transition-colors duration-300 ${isWished(product.id) ? 'text-red-500' : 'text-ink-subtle'}`}
+              fill={isWished(product.id) ? 'currentColor' : 'none'}
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={1.5}
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+            </svg>
+          </button>
+
           {/* Tag */}
           <span className="inline-flex self-start px-3 py-1 bg-gradient-to-r from-gold to-gold-light text-ivory text-label mb-6">
             {product.tag}

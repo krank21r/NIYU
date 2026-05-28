@@ -8,6 +8,7 @@ import OrderFlow from './components/OrderFlow'
 import ProductDetail from './components/ProductDetail'
 import Particles from './components/Particles'
 import { CartProvider } from './context/CartContext'
+import { WishlistProvider } from './context/WishlistContext'
 import useLenis from './hooks/useLenis'
 
 const Hero = lazy(() => import('./components/Hero'))
@@ -40,6 +41,7 @@ export default function App() {
 
   return (
     <CartProvider>
+    <WishlistProvider>
       <div className="bg-ivory min-h-screen relative">
         <a href="#main-content" className="skip-nav">
           Skip to main content
@@ -70,6 +72,7 @@ export default function App() {
           </Suspense>
         </main>
       </div>
+    </WishlistProvider>
     </CartProvider>
   )
 }

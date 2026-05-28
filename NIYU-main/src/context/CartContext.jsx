@@ -16,12 +16,14 @@ export function CartProvider({ children }) {
     setSelectedProduct(product)
     setStep('product-modal')
     document.body.style.overflow = 'hidden'
+    stopSmoothScroll()
   }, [])
 
   const closeFlow = useCallback(() => {
     setStep('closed')
     setSelectedProduct(null)
     document.body.style.overflow = ''
+    startSmoothScroll()
   }, [])
 
   const openProductDetail = useCallback((product) => {
@@ -46,6 +48,7 @@ export function CartProvider({ children }) {
       return [...prev, item]
     })
     setStep('cart')
+    stopSmoothScroll()
   }, [])
 
   const removeFromCart = useCallback((index) => {

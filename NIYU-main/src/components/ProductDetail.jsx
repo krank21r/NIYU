@@ -1,14 +1,18 @@
 import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCart } from '../context/CartContext'
+import { useWishlist } from '../context/WishlistContext'
 
 const ease = [0.23, 1, 0.32, 1]
 
 export default function ProductDetail() {
-  const { detailProduct, closeProductDetail, addToCart } = useCart()
+  const { detailProduct, closeProductDetail, addToCart, setStep } = useCart()
+  const { toggleWishlist, isWished } = useWishlist()
   const [selectedSize, setSelectedSize] = useState(null)
   const [qty, setQty] = useState(1)
   const [activeImage, setActiveImage] = useState(0)
+  const [pincode, setPincode] = useState('')
+  const [deliveryChecked, setDeliveryChecked] = useState(false)
   const scrollRef = useRef(null)
 
   const product = detailProduct
@@ -19,6 +23,8 @@ export default function ProductDetail() {
       setSelectedSize(sizes[sizes.length - 1] || null)
       setQty(1)
       setActiveImage(0)
+      setPincode('')
+      setDeliveryChecked(false)
     }
   }, [product?.id])
 
@@ -29,7 +35,6 @@ export default function ProductDetail() {
     return () => window.removeEventListener('popstate', handlePop)
   }, [product, closeProductDetail])
 
-  // Handle wheel scrolling inside the overlay, blocking Lenis from intercepting
   useEffect(() => {
     if (!product) return
     const el = scrollRef.current
@@ -59,6 +64,26 @@ export default function ProductDetail() {
       qty,
     })
     closeProductDetail()
+  }
+
+  const handleBuyNow = () => {
+    if (!product) return
+    addToCart({
+      name: product.name,
+      image: product.image,
+      description: product.description || '',
+      size: selectedSize.label,
+      price: selectedSize.price,
+      qty,
+    })
+    closeProductDetail()
+    setTimeout(() => setStep('checkout'), 50)
+  }
+
+  const checkDelivery = () => {
+    if (pincode.length === 6) {
+      setDeliveryChecked(true)
+    }
   }
 
   return (
@@ -94,23 +119,41 @@ export default function ProductDetail() {
                 {product.name}
               </h1>
 
-              <button
-                onClick={() => {
-                  closeProductDetail()
-                  history.back()
-                }}
-                className="w-11 h-11 flex items-center justify-center text-ink-muted hover:text-ink transition-colors duration-300"
-                aria-label="Close"
-              >
-                <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
+              <div className="flex items-center">
+                {/* Wishlist toggle */}
+                <button
+                  onClick={() => toggleWishlist(product.id)}
+                  className="w-11 h-11 flex items-center justify-center transition-colors duration-300"
+                  aria-label={isWished(product.id) ? 'Remove from wishlist' : 'Add to wishlist'}
+                >
+                  <svg
+                    className={`w-5 h-5 transition-colors duration-300 ${isWished(product.id) ? 'text-red-500' : 'text-ink-muted'}`}
+                    fill={isWished(product.id) ? 'currentColor' : 'none'}
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth={1.5}
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => {
+                    closeProductDetail()
+                    history.back()
+                  }}
+                  className="w-11 h-11 flex items-center justify-center text-ink-muted hover:text-ink transition-colors duration-300"
+                  aria-label="Close"
+                >
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
 
           {/* Main Content */}
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-10 pb-24 sm:pb-10">
             {/* Desktop: two-column / Mobile: stacked */}
             <div className="flex flex-col lg:flex-row gap-8 lg:gap-14">
 
@@ -231,6 +274,49 @@ export default function ProductDetail() {
                   </div>
                 </motion.div>
 
+                {/* Delivery Info — Amazon/Flipkart style */}
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: 0.14, ease }}
+                  className="mb-6"
+                >
+                  <p className="text-[11px] tracking-[0.1em] uppercase text-ink-subtle font-body font-medium mb-3">Delivery</p>
+                  <div className="flex gap-2 mb-2">
+                    <input
+                      type="text"
+                      inputMode="numeric"
+                      maxLength={6}
+                      value={pincode}
+                      onChange={(e) => {
+                        setPincode(e.target.value.replace(/\D/g, ''))
+                        setDeliveryChecked(false)
+                      }}
+                      placeholder="Enter pincode"
+                      className="flex-1 px-4 py-2.5 border border-ink/10 bg-transparent text-[14px] font-body text-ink-soft placeholder:text-ink-subtle/40 focus:outline-none focus:border-gold transition-colors duration-300"
+                    />
+                    <button
+                      onClick={checkDelivery}
+                      disabled={pincode.length !== 6}
+                      className="px-5 py-2.5 border border-ink/10 text-[11px] tracking-[0.08em] uppercase font-body font-medium text-ink-muted hover:border-ink/20 hover:text-ink-soft transition-all duration-300 disabled:opacity-30 disabled:cursor-not-allowed min-h-[44px]"
+                    >
+                      Check
+                    </button>
+                  </div>
+                  {deliveryChecked && pincode.length === 6 && (
+                    <motion.p
+                      initial={{ opacity: 0, y: -5 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="text-[13px] text-green-700 font-body"
+                    >
+                      Delivery by 3-5 business days. Free delivery on orders above &#8377;999.
+                    </motion.p>
+                  )}
+                  {!deliveryChecked && (
+                    <p className="text-[12px] text-ink-subtle font-body">Enter pincode to check delivery availability</p>
+                  )}
+                </motion.div>
+
                 {/* Quantity */}
                 <motion.div
                   initial={{ opacity: 0, y: 15 }}
@@ -274,12 +360,12 @@ export default function ProductDetail() {
                   </p>
                 </motion.div>
 
-                {/* Action Buttons */}
+                {/* Action Buttons — desktop only */}
                 <motion.div
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: 0.2, ease }}
-                  className="flex flex-col gap-3 pb-[max(1rem,env(safe-area-inset-bottom,0px))]"
+                  className="flex flex-col gap-3 pb-[max(1rem,env(safe-area-inset-bottom,0px))] hidden sm:flex"
                 >
                   <button
                     onClick={handleAddToCart}
@@ -288,7 +374,7 @@ export default function ProductDetail() {
                     Add to Cart
                   </button>
                   <button
-                    onClick={handleAddToCart}
+                    onClick={handleBuyNow}
                     className="w-full py-4 border border-gold text-gold hover:bg-gold hover:text-ivory text-[11px] tracking-[0.12em] uppercase font-body font-semibold transition-all duration-500 ease-[cubic-bezier(0.23,1,0.32,1)] min-h-[48px]"
                   >
                     Buy Now
@@ -359,6 +445,31 @@ export default function ProductDetail() {
                 </div>
               </motion.div>
             )}
+          </div>
+
+          {/* Sticky Bottom Bar — mobile only */}
+          <div className="sm:hidden fixed bottom-0 left-0 right-0 z-30 bg-ivory/95 backdrop-blur-sm border-t border-ink/5 px-4 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+            <div className="flex items-center gap-3">
+              <div className="flex-1">
+                <p className="text-[11px] text-ink-subtle font-body">Total</p>
+                <p className="text-lg font-heading font-bold text-ink">
+                  <span className="text-sm font-body font-light mr-px">&#8377;</span>
+                  {selectedSize ? selectedSize.price * qty : '—'}
+                </p>
+              </div>
+              <button
+                onClick={handleAddToCart}
+                className="flex-1 py-3.5 bg-ink hover:bg-ink-soft text-white text-[11px] tracking-[0.1em] uppercase font-body font-semibold transition-all duration-500 min-h-[48px]"
+              >
+                Add to Cart
+              </button>
+              <button
+                onClick={handleBuyNow}
+                className="flex-1 py-3.5 border border-gold text-gold hover:bg-gold hover:text-ivory text-[11px] tracking-[0.1em] uppercase font-body font-semibold transition-all duration-500 min-h-[48px]"
+              >
+                Buy Now
+              </button>
+            </div>
           </div>
         </motion.div>
       )}

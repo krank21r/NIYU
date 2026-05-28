@@ -37,8 +37,8 @@ export default function OrderFlow() {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-        className="fixed inset-0 z-[150] bg-ivory flex flex-col"
-        style={{ overscrollBehavior: 'contain' }}
+        className="fixed inset-0 z-[150] bg-ivory grid"
+        style={{ gridTemplateRows: 'auto auto 1fr', overscrollBehavior: 'contain' }}
       >
         {/* Header */}
         <div className="flex items-center justify-between px-5 pt-[max(1rem,env(safe-area-inset-top))] pb-4 border-b border-ink/5 bg-ivory/90 backdrop-blur-sm flex-shrink-0">
@@ -88,7 +88,7 @@ export default function OrderFlow() {
         )}
 
         {/* Content */}
-        <div className="flex-1 min-h-0">
+        <div className="min-h-0 overflow-y-auto overscroll-contain">
           <AnimatePresence mode="wait">
             <motion.div
               key={step}
@@ -96,7 +96,6 @@ export default function OrderFlow() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.3 }}
-              className="h-full overflow-y-auto overscroll-contain"
             >
               {step === 'cart' && <CartView />}
               {step === 'checkout' && <CheckoutForm />}

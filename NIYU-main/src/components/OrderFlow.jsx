@@ -37,11 +37,10 @@ export default function OrderFlow() {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.4, ease: [0.23, 1, 0.32, 1] }}
-        className="fixed inset-0 z-[150] bg-ivory grid"
-        style={{ gridTemplateRows: 'auto auto 1fr', overscrollBehavior: 'contain' }}
+        className="fixed inset-0 z-[150] bg-ivory overflow-hidden"
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 pt-[max(1rem,env(safe-area-inset-top))] pb-4 border-b border-ink/5 bg-ivory/90 backdrop-blur-sm flex-shrink-0">
+        <div className="flex items-center justify-between px-5 pt-[max(1rem,env(safe-area-inset-top))] pb-4 border-b border-ink/5 bg-ivory/90 backdrop-blur-sm">
           <button
             onClick={step === 'cart' ? closeFlow : () => {
               const order = ['cart', 'checkout', 'payment', 'confirmation']
@@ -74,7 +73,7 @@ export default function OrderFlow() {
 
         {/* Step progress */}
         {step !== 'confirmation' && (
-          <div className="flex items-center gap-2 px-5 py-3 border-b border-ink/5 flex-shrink-0">
+          <div className="flex items-center gap-2 px-5 py-3 border-b border-ink/5">
             {['cart', 'checkout', 'payment'].map((s, i) => (
               <div key={s} className="flex-1 flex items-center gap-2">
                 <div className={`h-1 flex-1 rounded-full transition-all duration-500 ${
@@ -87,22 +86,12 @@ export default function OrderFlow() {
           </div>
         )}
 
-        {/* Content */}
-        <div className="min-h-0 overflow-y-auto overscroll-contain">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={step}
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              {step === 'cart' && <CartView />}
-              {step === 'checkout' && <CheckoutForm />}
-              {step === 'payment' && <PaymentView />}
-              {step === 'confirmation' && <OrderConfirmation />}
-            </motion.div>
-          </AnimatePresence>
+        {/* Content — this div is the scroll container */}
+        <div style={{ height: 'calc(100vh - 120px)', overflowY: 'auto', overscrollBehavior: 'contain' }}>
+          {step === 'cart' && <CartView />}
+          {step === 'checkout' && <CheckoutForm />}
+          {step === 'payment' && <PaymentView />}
+          {step === 'confirmation' && <OrderConfirmation />}
         </div>
       </motion.div>
     </AnimatePresence>

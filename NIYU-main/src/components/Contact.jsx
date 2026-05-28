@@ -1,5 +1,5 @@
 import { motion, useInView } from 'framer-motion'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 
 const contacts = [
   {

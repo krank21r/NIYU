@@ -1,9 +1,9 @@
 import { createContext, useContext, useState, useCallback } from 'react'
 import { supabase } from '../lib/supabase'
+import { stopSmoothScroll, startSmoothScroll } from '../hooks/useLenis'
 
 const CartContext = createContext(null)
 
-const UPI_ID = 'PLACEHOLDER@upi'
 const WHATSAPP_NUMBER = '916302040779'
 
 export function CartProvider({ children }) {
@@ -28,13 +28,13 @@ export function CartProvider({ children }) {
 
   const openProductDetail = useCallback((product) => {
     setDetailProduct(product)
-    document.body.style.overflow = 'hidden'
+    stopSmoothScroll()
     history.pushState({ view: 'product-detail', productId: product.id }, '')
   }, [])
 
   const closeProductDetail = useCallback(() => {
     setDetailProduct(null)
-    document.body.style.overflow = ''
+    startSmoothScroll()
   }, [])
 
   const addToCart = useCallback((item) => {

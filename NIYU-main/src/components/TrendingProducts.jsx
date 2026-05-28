@@ -133,7 +133,7 @@ export default function TrendingProducts() {
               className="w-11 h-11 border border-ink/8 bg-cream flex items-center justify-center hover:border-ink/20 hover:bg-ink hover:text-cream transition-all duration-200 active:scale-95 group"
               aria-label="Scroll right"
             >
-              <svg className="w-4 h-4 text-ink-muted group-hover:text-gold transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden="true">
+              <svg className="w-4 h-4 text-ink-muted group-hover:text-cream transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5} aria-hidden="true">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
               </svg>
             </button>

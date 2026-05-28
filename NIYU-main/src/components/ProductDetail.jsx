@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCart } from '../context/CartContext'
 
@@ -9,6 +9,7 @@ export default function ProductDetail() {
   const [selectedSize, setSelectedSize] = useState(null)
   const [qty, setQty] = useState(1)
   const [activeImage, setActiveImage] = useState(0)
+  const scrollRef = useRef(null)
 
   const product = detailProduct
 
@@ -27,6 +28,21 @@ export default function ProductDetail() {
     window.addEventListener('popstate', handlePop)
     return () => window.removeEventListener('popstate', handlePop)
   }, [product, closeProductDetail])
+
+  // Handle wheel scrolling inside the overlay, blocking Lenis from intercepting
+  useEffect(() => {
+    if (!product) return
+    const el = scrollRef.current
+    if (!el) return
+
+    const handleWheel = (e) => {
+      e.stopPropagation()
+      el.scrollTop += e.deltaY
+    }
+
+    el.addEventListener('wheel', handleWheel, { passive: false })
+    return () => el.removeEventListener('wheel', handleWheel)
+  }, [product])
 
   const sizes = product?.sizes || []
   const images = product?.images || [product?.image].filter(Boolean)
@@ -49,6 +65,7 @@ export default function ProductDetail() {
     <AnimatePresence>
       {product && (
         <motion.div
+          ref={scrollRef}
           key="product-detail"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

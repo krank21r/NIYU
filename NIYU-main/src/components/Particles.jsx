@@ -24,8 +24,8 @@ export default function Particles({ count = 25 }) {
             top: `${p.y}%`,
             width: p.size,
             height: p.size,
-            background: `radial-gradient(circle, rgba(184,134,11,${p.opacity}) 0%, transparent 100%)`,
-            boxShadow: `0 0 ${p.size * 3}px rgba(184,134,11,${p.opacity * 0.2})`,
+            background: `radial-gradient(circle, rgba(201,169,110,${p.opacity}) 0%, transparent 100%)`,
+            boxShadow: `0 0 ${p.size * 3}px rgba(201,169,110,${p.opacity * 0.2})`,
           }}
           animate={{
             y: [0, -25, 0],

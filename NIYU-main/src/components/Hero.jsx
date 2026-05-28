@@ -30,7 +30,7 @@ export default function Hero() {
         className="absolute top-[6%] -left-[5%] -right-[5%] -bottom-[5%] w-[110%] h-[110%]"
         style={{ scale: bgScale, y: bgY }}
       >
-        <AnimatePresence mode="wait">
+        <AnimatePresence>
           {slides[current].type === 'video' ? (
             <motion.video
               key="video"
@@ -61,13 +61,13 @@ export default function Hero() {
         </AnimatePresence>
       </motion.div>
 
-      {/* Cinematic gradient overlays — warm ivory fade */}
+      {/* Cinematic gradient overlays — dark left for text readability */}
       <motion.div
-        className="absolute inset-0 bg-gradient-to-r from-ivory/80 via-ivory/20 to-transparent z-[1]"
+        className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/30 to-transparent z-[1]"
         style={{ opacity: overlayOpacity }}
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-ivory/60 via-transparent to-ivory/10 z-[1]" />
-      <div className="absolute inset-0 bg-gradient-to-b from-ivory/20 via-transparent to-transparent z-[1]" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/10 z-[1]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/15 via-transparent to-transparent z-[1]" />
 
       {/* Smoke particles */}
       <SmokeEffect count={3} className="z-[2]" />
@@ -83,14 +83,36 @@ export default function Hero() {
             initial={{ clipPath: 'inset(0 100% 0 0)' }}
             animate={{ clipPath: 'inset(0 0% 0 0)' }}
             transition={{ duration: 1, delay: 0.8, ease: [0.23, 1, 0.32, 1] }}
-            className="w-20 sm:w-24 h-[1px] bg-gradient-to-r from-gold to-transparent"
+            className="w-20 sm:w-24 h-[1px] bg-gradient-to-r from-gold-light to-transparent"
           />
+
+          {/* Headline */}
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 1.0, ease: [0.23, 1, 0.32, 1] }}
+            className="mt-6 sm:mt-8 text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-heading font-light text-ivory leading-[1.1] max-w-xl"
+          >
+            Scent That<br />
+            <span className="text-gold-light">Stays.</span>
+          </motion.h1>
+
+          {/* Subtext */}
+          <motion.p
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 1.2, ease: [0.23, 1, 0.32, 1] }}
+            className="mt-4 sm:mt-5 text-ivory/70 font-body font-light text-sm sm:text-base max-w-md leading-relaxed"
+          >
+            Pure oil perfumes crafted from the world's finest ingredients.
+            Designed to linger, made to impression.
+          </motion.p>
 
           {/* CTA */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1.2, ease: [0.23, 1, 0.32, 1] }}
+            transition={{ duration: 0.6, delay: 1.5, ease: [0.23, 1, 0.32, 1] }}
             className="mt-8"
           >
             <a href="#specials" className="btn-luxury">
@@ -108,10 +130,10 @@ export default function Hero() {
           className="relative z-20"
         >
           <div className="flex flex-col gap-1">
-            <span className="text-label text-gold-dark font-heading text-sm tracking-[0.25em]">
+            <span className="text-label text-gold-light font-heading text-sm tracking-[0.25em]">
               NIYU
             </span>
-            <span className="text-label text-gold/80 text-[11px]">
+            <span className="text-label text-ivory/50 text-[11px]">
               PURE OILS. PURE LUXURY.
             </span>
           </div>

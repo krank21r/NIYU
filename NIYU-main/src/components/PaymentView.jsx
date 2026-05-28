@@ -68,7 +68,7 @@ export default function PaymentView() {
   const getSelectedApp = () => paymentApps.find(a => a.id === selectedMethod)
 
   return (
-    <div className="p-6 flex flex-col items-center">
+    <div className="p-6 sm:p-8">
       <p className="text-[11px] tracking-[0.1em] uppercase text-ink-subtle font-body font-medium mb-2">Pay via UPI</p>
       <p className="text-2xl font-heading font-bold text-ink-soft mb-6">
         &#8377;{subtotal}

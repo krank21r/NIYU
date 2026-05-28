@@ -22,8 +22,8 @@ export default function CartView() {
   }
 
   return (
-    <div className="flex flex-col h-full">
-      <div className="flex-1 overflow-y-auto p-6 space-y-4">
+    <div className="p-6 space-y-4">
+      <div>
         {items.map((item, index) => (
           <motion.div
             key={`${item.name}-${item.size}-${index}`}

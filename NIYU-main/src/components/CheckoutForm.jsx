@@ -28,8 +28,8 @@ export default function CheckoutForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col h-full">
-      <div className="flex-1 overflow-y-auto p-6 space-y-5">
+    <form onSubmit={handleSubmit} className="p-6 space-y-5 pb-6">
+      <div>
         <div>
           <label className="block text-[11px] tracking-[0.1em] uppercase text-ink-subtle font-body font-medium mb-2">Full Name</label>
           <input
@@ -95,7 +95,7 @@ export default function CheckoutForm() {
       </div>
 
       {/* Footer */}
-      <div className="border-t border-ink/5 p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] bg-ivory/80 backdrop-blur-sm">
+      <div className="border-t border-ink/5 pt-4 pb-4">
         <div className="flex items-center justify-between mb-5">
           <span className="text-sm text-ink-subtle font-body">Order Total</span>
           <span className="text-xl font-heading font-bold text-ink-soft">&#8377;{subtotal}</span>

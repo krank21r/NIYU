@@ -96,7 +96,7 @@ export default function OrderFlow() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -40 }}
               transition={{ duration: 0.35, ease: [0.23, 1, 0.32, 1] }}
-              className="h-full"
+              className=""
             >
               {step === 'cart' && <CartView />}
               {step === 'checkout' && <CheckoutForm />}
